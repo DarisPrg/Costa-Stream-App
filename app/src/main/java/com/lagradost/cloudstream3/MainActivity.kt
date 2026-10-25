@@ -1210,8 +1210,6 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
             if (costaRepo != null) {
                 // Descargar todos los plugins del repo oficial
                 PluginsViewModel.downloadAll(this@MainActivity, costaRepo, null)
-                // Home por defecto: Modo Vacaciones
-                DataStoreHelper.currentHomePage = "Modo Vacaciones"
             }
         }
         try {
@@ -2041,8 +2039,10 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
 
         try {
             if (getKey<Boolean>(HAS_DONE_SETUP_KEY, false) != true) {
-                // Costa Stream: primer arranque -> idioma español, saltar el asistente e ir directo al menú
+                // Costa Stream: primer arranque -> idioma español, Home en Modo Vacaciones,
+                // saltar el asistente e ir directo al menú
                 settingsManager.edit().putString(getString(R.string.locale_key), "es").apply()
+                DataStoreHelper.currentHomePage = "Modo Vacaciones"
                 setKey(HAS_DONE_SETUP_KEY, true)
             }
         } catch (e: Exception) {
