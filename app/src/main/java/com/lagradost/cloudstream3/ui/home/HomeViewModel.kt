@@ -133,7 +133,10 @@ class HomeViewModel : ViewModel() {
     private var currentShuffledList: List<SearchResponse> = listOf()
 
     private fun autoloadRepo(): APIRepository {
-        return APIRepository(apis.withLock { apis.first { it.hasMainPage } })
+        return APIRepository(apis.withLock {
+            // Costa Stream: por defecto arranca con uno de nuestros plugins (es-AR)
+            apis.firstOrNull { it.hasMainPage && it.lang == "es-AR" } ?: apis.first { it.hasMainPage }
+        })
     }
 
     private val _availableWatchStatusTypes =

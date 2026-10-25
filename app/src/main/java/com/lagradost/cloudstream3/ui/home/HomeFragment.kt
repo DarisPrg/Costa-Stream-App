@@ -382,7 +382,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }
 
         fun Context.selectHomepage(selectedApiName: String?, callback: (String) -> Unit) {
-            val validAPIs = filterProviderByPreferredMedia().toMutableList()
+            // Costa Stream: el selector del Home muestra solo nuestros plugins (es-AR).
+            // La búsqueda sigue usando todos los proveedores por detrás.
+            val validAPIs = filterProviderByPreferredMedia()
+                .filter { it.lang == "es-AR" }
+                .toMutableList()
 
             validAPIs.add(0, randomApi)
             validAPIs.add(0, noneApi)
