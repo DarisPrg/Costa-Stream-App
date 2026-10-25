@@ -98,15 +98,9 @@ data class PluginWrapper(
 object RepositoryManager {
     const val ONLINE_PLUGINS_FOLDER = "Extensions"
     val PREBUILT_REPOSITORIES: Array<RepositoryData> by lazy {
-        // Costa Stream: repositorio oficial precargado de fábrica
-        arrayOf(
-            RepositoryData(
-                null,
-                "Costa Stream",
-                "https://raw.githubusercontent.com/DarisPrg/Costa-Stream/main/repo.json",
-                "Repositorio oficial de Costa Stream"
-            )
-        ) + (getKey<Array<RepositoryData>>("PREBUILT_REPOSITORIES") ?: emptyArray())
+        // Costa Stream: la precarga se hace en preloadCostaRepo() (se guarda en REPOSITORIES_KEY).
+        // Aca se deja vacio para no duplicar el repo en la lista de Extensiones.
+        getKey<Array<RepositoryData>>("PREBUILT_REPOSITORIES") ?: emptyArray()
     }
     private val GH_REGEX =
         Regex("^https://raw.githubusercontent.com/([A-Za-z0-9-]+)/([A-Za-z0-9_.-]+)/(.*)$")
