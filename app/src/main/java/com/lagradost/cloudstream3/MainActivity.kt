@@ -2041,16 +2041,9 @@ class MainActivity : AppCompatActivity(), ColorPickerDialogListener, BiometricCa
 
         try {
             if (getKey<Boolean>(HAS_DONE_SETUP_KEY, false) != true) {
-                navController.navigate(R.id.navigation_setup_language)
-                // If no plugins bring up extensions screen
-            } else if (PluginManager.getPluginsOnline().isEmpty()
-                && PluginManager.getPluginsLocal().isEmpty()
-//                && PREBUILT_REPOSITORIES.isNotEmpty()
-            ) {
-                navController.navigate(
-                    R.id.navigation_setup_extensions,
-                    SetupFragmentExtensions.newInstance(false)
-                )
+                // Costa Stream: primer arranque -> idioma español, saltar el asistente e ir directo al menú
+                settingsManager.edit().putString(getString(R.string.locale_key), "es").apply()
+                setKey(HAS_DONE_SETUP_KEY, true)
             }
         } catch (e: Exception) {
             logError(e)
