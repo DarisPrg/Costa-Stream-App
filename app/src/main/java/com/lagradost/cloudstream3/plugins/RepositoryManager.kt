@@ -251,22 +251,26 @@ object RepositoryManager {
         return getKey<Array<RepositoryData>>(REPOSITORIES_KEY) ?: emptyArray()
     }
 
-    /** Costa Stream: agrega el repositorio oficial una sola vez en el primer arranque. */
-    suspend fun preloadCostaRepo() {
-        val preloadedKey = "costa_repo_preloaded_v1"
-        if (getKey<Boolean>(preloadedKey) == true) return
+    /**
+     * Costa Stream: en el primer arranque agrega el repositorio oficial.
+     * Devuelve el RepositoryData si es la primera vez (para que el caller
+     * descargue los plugins), o null si ya se hizo antes.
+     */
+    suspend fun preloadCostaRepo(): RepositoryData? {
+        val firstRunKey = "costa_first_run_v2"
+        if (getKey<Boolean>(firstRunKey) == true) return null
         val url = "https://raw.githubusercontent.com/DarisPrg/Costa-Stream/main/repo.json"
+        val repo = RepositoryData(
+            null,
+            "Costa Stream",
+            url,
+            "Repositorio oficial de Costa Stream"
+        )
         if (getRepositories().none { it.url == url }) {
-            addRepository(
-                RepositoryData(
-                    null,
-                    "Costa Stream",
-                    url,
-                    "Repositorio oficial de Costa Stream"
-                )
-            )
+            addRepository(repo)
         }
-        setKey(preloadedKey, true)
+        setKey(firstRunKey, true)
+        return repo
     }
 
     // Don't want to read before we write in another thread
